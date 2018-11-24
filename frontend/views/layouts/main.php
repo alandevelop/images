@@ -60,7 +60,19 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
+
+
     <div class="container">
+
+        <div class="">
+            <?= yii\authclient\widgets\AuthChoice::widget([
+                'baseAuthUrl' => ['site/auth'],
+                'popupMode' => false,
+            ]) ?>
+            Войти с помощью вконтакте.
+        </div>
+
+
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
@@ -68,6 +80,8 @@ AppAsset::register($this);
         <?= $content ?>
     </div>
 </div>
+
+
 
 <footer class="footer">
     <div class="container">
