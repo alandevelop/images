@@ -43,5 +43,10 @@ return [
             ],
         ],
     ],
+    'modules' => [
+        'user' => [
+            'class' => 'frontend\modules\user\Module',
+        ],
+    ],
     'params' => $params,
 ];
