@@ -1,13 +1,16 @@
 <?php
 namespace frontend\models;
 
+use Faker\Provider\File;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
 use yii\web\IdentityInterface;
+use yii\web\ServerErrorHttpException;
 use yii\web\UploadedFile;
+use frontend\components\Storage;
 
 /**
  * User model
@@ -232,26 +235,19 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function saveAvatarFile(UploadedFile $file)
     {
-        $new_name = sha1_file($file->tempName) . '.' . $file->extension;
-        $path = 'uploads/' . $this->id . '/' . $new_name;
-        FileHelper::createDirectory(dirname($path));
-
-        if ($file->saveAs($path)) {
-
-            if ($this->picture) {
-                FileHelper::unlink($this->picture);
-            }
-
-            $this->picture = $path;
-            $this->save(false);
-            return $path;
-        } else {
-            return false;
+        $path = Storage::saveFile($file, $this);
+        if ($this->picture) {
+            Storage::removeFile($this->picture);
         }
+        $this->picture = $path;
+
+        $this->save(false);
+
+
     }
 
     public function getAvatar()
     {
-        return $this->picture ? '/' . $this->picture : '/img/no-image.png';
+        return $this->picture ? $this->picture : '/img/no-image.png';
     }
 }

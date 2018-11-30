@@ -75,8 +75,7 @@ class ProfileController extends Controller
 
     public function actionUploadAvatar()
     {
-        $response = Yii::$app->response;
-        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response = Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $model = new AvatarForm();
         $model->picture = UploadedFile::getInstanceByName('avatar');

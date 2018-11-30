@@ -40,13 +40,20 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'profile/<id:\w+>' => 'user/profile/view'
+                'profile/<id:\d+>' => 'user/profile/view',
+                'post/<id:\d+>' => 'post/default/view',
             ],
+        ],
+        'storage' => [
+            'class' => 'frontend\storage\Storage'
         ],
     ],
     'modules' => [
         'user' => [
             'class' => 'frontend\modules\user\Module',
+        ],
+        'post' => [
+            'class' => 'frontend\modules\post\Module',
         ],
     ],
     'params' => $params,
