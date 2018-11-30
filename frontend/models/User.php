@@ -5,7 +5,9 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\FileHelper;
 use yii\web\IdentityInterface;
+use yii\web\UploadedFile;
 
 /**
  * User model
@@ -15,6 +17,7 @@ use yii\web\IdentityInterface;
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
+ * @property string $about
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
@@ -185,5 +188,70 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+
+    public function subscribe($user)
+    {
+        $redis = Yii::$app->redis;
+
+        $redis->sadd("user:{$this->id}:subscriptions", $user->id);
+        $redis->sadd("user:{$user->id}:followers", $this->id);
+    }
+
+    public function unsubscribe($user)
+    {
+        $redis = Yii::$app->redis;
+
+        $redis->srem("user:{$this->id}:subscriptions", $user->id);
+        $redis->srem("user:{$user->id}:followers", $this->id);
+    }
+
+    public function getSubscriptions()
+    {
+        $redis = Yii::$app->redis;
+        $ids = $redis->smembers("user:{$this->id}:subscriptions");
+
+        return User::find()->where(['id' => $ids])->orderBy('username')->asArray()->all();
+    }
+
+    public function getFollowers()
+    {
+        $redis = Yii::$app->redis;
+        $ids = $redis->smembers("user:{$this->id}:followers");
+
+        return User::find()->where(['id' => $ids])->orderBy('username')->asArray()->all();
+    }
+
+    public function isSubscribedTo($user)
+    {
+        $redis = Yii::$app->redis;
+        return $redis->sismember("user:{$this->id}:subscriptions", $user->id);
+
+    }
+
+    public function saveAvatarFile(UploadedFile $file)
+    {
+        $new_name = sha1_file($file->tempName) . '.' . $file->extension;
+        $path = 'uploads/' . $this->id . '/' . $new_name;
+        FileHelper::createDirectory(dirname($path));
+
+        if ($file->saveAs($path)) {
+
+            if ($this->picture) {
+                FileHelper::unlink($this->picture);
+            }
+
+            $this->picture = $path;
+            $this->save(false);
+            return $path;
+        } else {
+            return false;
+        }
+    }
+
+    public function getAvatar()
+    {
+        return $this->picture ? '/' . $this->picture : '/img/no-image.png';
     }
 }

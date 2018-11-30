@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use Yii;
 
 AppAsset::register($this);
 ?>
@@ -62,14 +63,17 @@ AppAsset::register($this);
 
     <div class="container">
 
-        <div class="">
-            <?= yii\authclient\widgets\AuthChoice::widget([
-                'baseAuthUrl' => ['user/default/auth'],
-                'popupMode' => false,
-            ]) ?>
-            Войти с помощью вконтакте.
-        </div>
+        <?php if (Yii::$app->user->isGuest): ?>
 
+            <div class="">
+                <?= \yii\authclient\widgets\AuthChoice::widget([
+                    'baseAuthUrl' => ['/user/default/auth'],
+                    'popupMode' => false,
+                ]) ?>
+                Войти с помощью вконтакте.
+            </div>
+
+        <?php endif; ?>
 
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

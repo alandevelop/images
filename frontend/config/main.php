@@ -40,6 +40,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'profile/<id:\w+>' => 'user/profile/view'
             ],
         ],
     ],
