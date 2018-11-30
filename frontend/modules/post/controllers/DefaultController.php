@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use frontend\models\Post;
 use frontend\models\User;
+use yii\web\Response;
 
 /**
  * Default controller for the `post` module
@@ -36,10 +37,12 @@ class DefaultController extends Controller
     {
         $post = $this->findPost($id);
         $user = User::findOne($post->user_id);
+        $current_user = Yii::$app->user->identity;
 
         return $this->render('view', [
             'post' => $post,
             'user' => $user,
+            'current_user' => $current_user,
         ]);
     }
 
@@ -50,4 +53,30 @@ class DefaultController extends Controller
         }
         throw new NotFoundHttpException();
     }
+
+    public function actionLike()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $user_id = Yii::$app->user->identity->getId();
+        $post = $this->findPost(Yii::$app->request->post('id'));
+
+        $post->like($user_id);
+
+        return $post->countLikes();
+    }
+
+    public function actionUnlike()
+    {
+        $user_id = Yii::$app->user->identity->getId();
+        $post = $this->findPost(Yii::$app->request->post('id'));
+
+        $post->unlike($user_id);
+
+        return $post->countLikes();
+    }
+
+
 }

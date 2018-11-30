@@ -49,4 +49,31 @@ class Post extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
+
+    public function like($user_id)
+    {
+        $redis = Yii::$app->redis;
+        $redis->sadd("post:{$this->id}:likes", "$user_id");
+        $redis->sadd("user:{$user_id}:likes", $this->id);
+    }
+
+    public function unlike($user_id)
+    {
+        $redis = Yii::$app->redis;
+        $redis->srem("post:{$this->id}:likes", "$user_id");
+        $redis->srem("user:{$user_id}:likes", $this->id);
+    }
+
+    public function countLikes()
+    {
+        $redis = Yii::$app->redis;
+        return $redis->scard("post:{$this->id}:likes");
+    }
+
+    public function isLikedBy($user_id)
+    {
+        $redis = Yii::$app->redis;
+        return $redis->sismember("post:{$this->id}:likes", $user_id);
+    }
+
 }
