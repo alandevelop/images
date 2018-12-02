@@ -19,7 +19,7 @@ $this->registerJsFile('@web/js/likes.js', ['depends' => JqueryAsset::class]);
         id="like"
         class="btn btn-primary"
         data-id="<?php echo $post->id; ?>"
-    <?php echo (($current_user && $post->isLikedBy($current_user->id)) || Yii::$app->user->isGuest) ? 'disabled' : null ?>
+    <?php echo ($current_user && $post->isLikedBy($current_user->id)) ? 'disabled' : null ?>
 >
     Like
 </button>
@@ -27,7 +27,7 @@ $this->registerJsFile('@web/js/likes.js', ['depends' => JqueryAsset::class]);
         id="unlike"
         class="btn btn-primary"
         data-id="<?php echo $post->id; ?>"
-    <?php echo (($current_user && $post->isLikedBy($current_user->id)) || !Yii::$app->user->isGuest) ? null : 'disabled' ?>
+    <?php echo ($current_user && $post->isLikedBy($current_user->id)) ? null : 'disabled' ?>
 >
     Unlike
 </button>

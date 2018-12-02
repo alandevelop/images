@@ -47,6 +47,9 @@ return [
         'storage' => [
             'class' => 'frontend\storage\Storage'
         ],
+        'feed' => [
+            'class' => 'frontend\components\FeedService'
+        ],
     ],
     'modules' => [
         'user' => [

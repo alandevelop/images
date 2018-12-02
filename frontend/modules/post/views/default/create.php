@@ -9,8 +9,8 @@ use yii\bootstrap\Html;
 <?php
 $form = ActiveForm::begin();
 
-echo $form->field($formModel, 'description');
-echo $form->field($formModel, 'picture')->fileInput();
+echo $form->field($form_model, 'description');
+echo $form->field($form_model, 'picture')->fileInput();
 
 echo Html::submitButton('Создать пост');
 

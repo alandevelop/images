@@ -9,27 +9,28 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use frontend\models\Post;
 use frontend\models\User;
-use yii\web\Response;
 
-/**
- * Default controller for the `post` module
- */
+
 class DefaultController extends Controller
 {
 
     public function actionCreate()
     {
-        $formModel = new PostForm(Yii::$app->user->identity);
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/user/default/login']);
+        }
 
-        if ($formModel->load(Yii::$app->request->post())) {
-            $formModel->picture = UploadedFile::getInstance($formModel, 'picture');
-            $formModel->save();
+        $form_model = new PostForm(Yii::$app->user->identity);
+
+        if ($form_model->load(Yii::$app->request->post())) {
+            $form_model->picture = UploadedFile::getInstance($form_model, 'picture');
+            $form_model->save();
 
             return $this->goHome();
         }
 
         return $this->render('create', [
-            'formModel' => $formModel,
+            'form_model' => $form_model,
         ]);
     }
 

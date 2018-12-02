@@ -10,14 +10,7 @@ use frontend\models\User;
  */
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -27,16 +20,13 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return mixed
-     */
     public function actionIndex()
     {
         return $this->render('index',
             [
-                'users' => User::find()->all()
+                'users' => User::find()->all(),
+                'feeds' => (!Yii::$app->user->isGuest) ? Yii::$app->user->identity->getFeeds() : null,
+                'current_user' => Yii::$app->user->identity,
             ]
         );
     }

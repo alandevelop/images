@@ -12,13 +12,18 @@ use yii\base\Model;
 use frontend\models\User;
 use frontend\models\Post;
 use frontend\components\Storage;
+use Yii;
+use frontend\modules\post\models\events\EventPostSave;
 
 class PostForm extends Model
 {
+    const EVENT_POST_SAVE = 'event_post_save';
+
     public $description;
     public $picture;
 
     private $user;
+
 
     public function rules()
     {
@@ -38,6 +43,7 @@ class PostForm extends Model
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->on(self::EVENT_POST_SAVE, [Yii::$app->feed, 'addToFeed']);
     }
 
     public function save()
@@ -48,7 +54,14 @@ class PostForm extends Model
             $post->created_at = time();
             $post->description = $this->description;
             $post->picture = Storage::saveFile($this->picture, $this->user);
-            $post->save();
+            if ($post->save()) {
+                $event = new EventPostSave();
+                $event->user = $this->user;
+                $event->post = $post;
+                $this->trigger(self::EVENT_POST_SAVE, $event);
+                return true;
+            }
         }
+        return false;
     }
 }

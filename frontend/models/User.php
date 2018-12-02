@@ -11,6 +11,7 @@ use yii\web\IdentityInterface;
 use yii\web\ServerErrorHttpException;
 use yii\web\UploadedFile;
 use frontend\components\Storage;
+use frontend\models\Feed;
 
 /**
  * User model
@@ -230,7 +231,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $redis = Yii::$app->redis;
         return $redis->sismember("user:{$this->id}:subscriptions", $user->id);
-
     }
 
     public function saveAvatarFile(UploadedFile $file)
@@ -242,12 +242,21 @@ class User extends ActiveRecord implements IdentityInterface
         $this->picture = $path;
 
         $this->save(false);
-
-
     }
 
     public function getAvatar()
     {
         return $this->picture ? $this->picture : '/img/no-image.png';
+    }
+
+    public function getFeeds()
+    {
+        return $this->hasMany(Feed::class, ['user_id' => "id"])->all();
+    }
+
+    public function likesPost($post_id)
+    {
+        $redis = Yii::$app->redis;
+        return $redis->sismember("user:{$this->id}:likes", $post_id);
     }
 }
