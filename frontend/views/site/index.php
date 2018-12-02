@@ -51,23 +51,21 @@ $this->title = 'My Yii Application';
                         <?php endif; ?>
 
                         <button
-                                id="like"
-                                class="btn btn-primary"
+                                class="btn btn-primary like"
                                 data-id="<?php echo $feed->post_id; ?>"
                             <?php echo (($current_user && $current_user->likesPost($feed->post_id)) || Yii::$app->user->isGuest) ? 'disabled' : null ?>
                         >
                             Like
                         </button>
                         <button
-                                id="unlike"
-                                class="btn btn-primary"
+                                class="btn btn-primary unlike"
                                 data-id="<?php echo $feed->post_id; ?>"
                             <?php echo (($current_user && $current_user->likesPost($feed->post_id)) || Yii::$app->user->isGuest) ? null : 'disabled' ?>
                         >
                             Unlike
                         </button>
 
-                        <p>Лайки: <span id="count_likes"><?php echo $feed->countLikes(); ?></span></p>
+                        <p>Лайки: <span class="count_likes"><?php echo $feed->countLikes(); ?></span></p>
                     </div>
                 <?php endforeach; ?>
                 <hr>

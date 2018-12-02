@@ -16,20 +16,18 @@ $this->registerJsFile('@web/js/likes.js', ['depends' => JqueryAsset::class]);
 <?php endif; ?>
 
 <button
-        id="like"
-        class="btn btn-primary"
+        class="btn btn-primary like"
         data-id="<?php echo $post->id; ?>"
     <?php echo ($current_user && $post->isLikedBy($current_user->id)) ? 'disabled' : null ?>
 >
     Like
 </button>
 <button
-        id="unlike"
-        class="btn btn-primary"
+        class="btn btn-primary unlike"
         data-id="<?php echo $post->id; ?>"
     <?php echo ($current_user && $post->isLikedBy($current_user->id)) ? null : 'disabled' ?>
 >
     Unlike
 </button>
 
-<p>Лайки: <span id="count_likes"><?php echo $post->countLikes(); ?></span></p>
+<p>Лайки: <span class="count_likes"><?php echo $post->countLikes(); ?></span></p>

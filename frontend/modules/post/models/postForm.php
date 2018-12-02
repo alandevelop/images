@@ -14,6 +14,7 @@ use frontend\models\Post;
 use frontend\components\Storage;
 use Yii;
 use frontend\modules\post\models\events\EventPostSave;
+use Intervention\Image\ImageManager;
 
 class PostForm extends Model
 {
@@ -44,6 +45,18 @@ class PostForm extends Model
     {
         $this->user = $user;
         $this->on(self::EVENT_POST_SAVE, [Yii::$app->feed, 'addToFeed']);
+        $this->on(self::EVENT_BEFORE_VALIDATE, [$this, 'resizeImage']);
+    }
+
+    public function resizeImage()
+    {
+        $manager = new ImageManager(array('driver' => 'imagick'));
+        $image = $manager->make($this->picture->tempName);
+        $image->resize(800, 600, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+        $image->save();
     }
 
     public function save()
