@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\web\JqueryAsset;
 
 $this->registerJsFile('@web/js/likes.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile('@web/js/complaints.js', ['depends' => JqueryAsset::class]);
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
@@ -33,7 +34,7 @@ $this->title = 'My Yii Application';
             <div class="row">
                 <h2>Ваша лента новостей:</h2>
                 <?php foreach ($feeds as $feed): ?>
-                    <div class="col-md-6">
+                    <div class="col-md-6 feed-item">
                         <p>
                             <a href="<?php echo Url::to(['user/profile/view', 'id' => $feed->user_id]); ?>">
                                 <?php echo $feed->author_username; ?> <br>
@@ -66,6 +67,14 @@ $this->title = 'My Yii Application';
                         </button>
 
                         <p>Лайки: <span class="count_likes"><?php echo $feed->countLikes(); ?></span></p>
+
+                        <button
+                                class="btn btn-warning complain"
+                                data-id="<?php echo $feed->post_id; ?>"
+                            <?php echo ($feed->isComplainedBy($current_user)) ? 'disabled' : null ?>
+                        >
+                            <?php echo ($feed->isComplainedBy($current_user)) ? 'Жалоба подана' : 'Пожаловаться на пост' ?>
+                        </button>
                     </div>
                 <?php endforeach; ?>
                 <hr>

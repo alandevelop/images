@@ -79,5 +79,23 @@ class DefaultController extends Controller
         return $post->countLikes();
     }
 
+    public function actionComplain()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/user/default/login');
+        }
+
+        $user = Yii::$app->user->identity;
+        $post_id = Yii::$app->request->post('id');
+        $post = $this->findPost($post_id);
+
+        if ($post->complain($user)) {
+            return 'Жалоба подана';
+        }
+
+        return 'Ошибка';
+
+    }
+
 
 }
