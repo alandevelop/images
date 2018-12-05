@@ -26,6 +26,39 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    public $assignAdmin;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->on(self::EVENT_AFTER_UPDATE, [$this, 'assignRole']);
+    }
+
+    public function assignRole()
+    {
+        $auth = Yii::$app->authManager;
+
+        if ($this->assignAdmin) {
+            $auth->revokeAll($this->getId());
+
+            $admin_role = $auth->getRole('admin');
+            $auth->assign($admin_role, $this->getId());
+
+            return null;
+        }
+        $auth->revokeAll($this->getId());
+        return null;
+    }
+
+    public function isAdmin()
+    {
+        if (Yii::$app->authManager->getAssignment('admin', $this->id)) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * {@inheritdoc}
@@ -53,6 +86,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['assignAdmin', 'safe']
         ];
     }
 
@@ -78,9 +112,9 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUserEmail($user_email)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $user_email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -185,5 +219,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function getPictureSrc()
+    {
+        if ($this->picture) {
+            return Yii::$app->params['storageUri'] . $this->picture;
+        }
+        return Yii::$app->params['storageUri'] . '/img/no-image.png';
     }
 }

@@ -21,6 +21,10 @@ $this->title = 'My Yii Application';
                 <a href="<?php echo Url::to(['complaints/manage/index']); ?>">Жалобы</a>
             </div>
 
+            <div class="col-lg-4">
+                <a href="<?php echo Url::to(['user/index']); ?>">Пользователи</a>
+            </div>
+
         </div>
 
     </div>
