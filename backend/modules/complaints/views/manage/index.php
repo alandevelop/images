@@ -7,8 +7,8 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Posts';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Жалобы';
+$this->params['breadcrumbs'][] = 'Жалобы';
 ?>
 <div class="post-index">
 
@@ -16,11 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <p>Пост одобрен!</p>
     <?php endif; ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Post', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <h1>Жалобы</h1>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

@@ -11,7 +11,7 @@ use yii\web\IdentityInterface;
 use yii\web\ServerErrorHttpException;
 use yii\web\UploadedFile;
 use frontend\components\Storage;
-use frontend\models\Feed;
+use frontend\models\Post;
 
 /**
  * User model
@@ -60,6 +60,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['about', 'string'],
         ];
     }
 
@@ -194,6 +195,10 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    public function getPosts()
+    {
+        return $this->hasMany(Post::class, ['user_id' => 'id']);
+    }
 
     public function subscribe($user)
     {
@@ -216,7 +221,7 @@ class User extends ActiveRecord implements IdentityInterface
         $redis = Yii::$app->redis;
         $ids = $redis->smembers("user:{$this->id}:subscriptions");
 
-        return User::find()->where(['id' => $ids])->orderBy('username')->asArray()->all();
+        return User::find()->where(['id' => $ids])->orderBy('username')->all();
     }
 
     public function getFollowers()
@@ -224,7 +229,7 @@ class User extends ActiveRecord implements IdentityInterface
         $redis = Yii::$app->redis;
         $ids = $redis->smembers("user:{$this->id}:followers");
 
-        return User::find()->where(['id' => $ids])->orderBy('username')->asArray()->all();
+        return User::find()->where(['id' => $ids])->orderBy('username')->all();
     }
 
     public function isSubscribedTo($user)

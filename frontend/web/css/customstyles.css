@@ -1,0 +1,43 @@
+.list_avatar {
+    display: inline-block;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    -webkit-background-size: cover;
+    background-size: cover;
+    margin-right: 10px;
+}
+
+.list_link {
+    vertical-align: middle;
+    display: block;
+    line-height: 20px;
+    text-decoration: none;
+}
+
+.list_link:hover {
+    text-decoration: none;
+}
+
+.list_name {
+    line-height: 40px;
+    vertical-align: top;
+    text-decoration: none;
+}
+
+.bigAvatar {
+    display: inline-block;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    width: 170px;
+    height: 170px;
+    -webkit-background-size: cover;
+    background-size: cover;
+    margin-right: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

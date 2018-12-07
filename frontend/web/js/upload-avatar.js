@@ -17,7 +17,8 @@ $(window).on('load', function () {
             type: 'POST',
             success: function (data) {
                 if (data[0] == 'success') {
-                    $('#avatarImg').attr('src', data[1]);
+                    // $('#avatarImg').attr('src', data[1]);
+                    $('#avatarImg').attr('style', 'background-image: url(' + data[1] + ');');
                 } else {
                     msg.show();
                     for (var key in data) {

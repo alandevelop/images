@@ -91,4 +91,9 @@ class Post extends \yii\db\ActiveRecord
         return false;
     }
 
+    public function isComplainedBy($user)
+    {
+        $redis = Yii::$app->redis;
+        return $redis->sismember("post:{$this->id}:complaints", $user->id);
+    }
 }

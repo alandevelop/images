@@ -3,7 +3,7 @@ $(window).on('load', function () {
         var btn = $(this);
         var id = btn.attr('data-id');
 
-        $.post('post/default/complain', {id: id}, function (data) {
+        $.post('/post/default/complain', {id: id}, function (data) {
             btn.html('Жалоба подана');
             btn.prop('disabled', true)
         });

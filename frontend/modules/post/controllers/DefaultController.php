@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use frontend\models\Post;
 use frontend\models\User;
+use frontend\components\Storage;
 
 
 class DefaultController extends Controller
@@ -26,12 +27,25 @@ class DefaultController extends Controller
             $form_model->picture = UploadedFile::getInstance($form_model, 'picture');
             $form_model->save();
 
-            return $this->goHome();
+            return $this->redirect(['/user/profile/view', 'id' => Yii::$app->user->id]);
         }
 
         return $this->render('create', [
             'form_model' => $form_model,
+            'currentUser' => Yii::$app->user->identity,
         ]);
+    }
+
+    public function actionDelete()
+    {
+        $id = Yii::$app->request->post('id');
+        $post = $this->findPost($id);
+        if ($post->picture) {
+            Storage::removeFile($post->picture);
+        }
+        $post->delete();
+
+        return true;
     }
 
     public function actionView($id)

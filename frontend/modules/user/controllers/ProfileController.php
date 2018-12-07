@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\modules\user\controllers;
 
 use yii\web\Controller;
@@ -11,46 +12,26 @@ use frontend\modules\user\models\AvatarForm;
 
 class ProfileController extends Controller
 {
-  public function actionView ($id)
-  {
-      return $this->render(
-          'view',
-          [
-              'currentUser' => Yii::$app->user->identity,
-              'user' => $this->findUser($id),
-          ]
-      );
-  }
+    public function actionView($id)
+    {
+        return $this->render(
+            'view',
+            [
+                'currentUser' => Yii::$app->user->identity,
+                'user' => $this->findUser($id),
+            ]
+        );
+    }
 
-  public function findUser ($id)
-  {
-      if (User::find()->where(['id' => $id])->exists()) {
-          return $user = User::find()->where(['id' => $id])->one();
-      }
 
-      throw new NotFoundHttpException();
-  }
+    public function findUser($id)
+    {
+        if (User::find()->where(['id' => $id])->exists()) {
+            return $user = User::find()->where(['id' => $id])->with('posts')->one();
+        }
 
-//    public function actionFaker()
-//    {
-//        $faker = \Faker\Factory::create();
-//
-//        for ($i=0; $i<=10; $i++) {
-//            $user = new User;
-//
-//            $user->username = $faker->name;
-//            $user->email = $faker->email;
-//            $user->about = $faker->text(200);
-//            $user->created_at = $time = time();
-//            $user->updated_at = $time;
-//            $user->auth_key = Yii::$app->security->generateRandomString();
-//            $user->password_hash = Yii::$app->security->generateRandomString();
-//
-//            $user->save();
-//        }
-//
-//        echo '10 users has been generated';
-//    }
+        throw new NotFoundHttpException();
+    }
 
 
     public function actionSubscribe($id)
@@ -90,6 +71,23 @@ class ProfileController extends Controller
         } else {
             return $model->getErrors();
 
+        }
+    }
+
+    public function actionChangeDescription()
+    {
+        $response = Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->get('id');
+        $text = Yii::$app->request->get('text');
+
+        $user = $this->findUser($id);
+        $user->about = $text;
+        if ($user->validate()) {
+            $user->save();
+            return $user->about;
+        } else {
+            return null;
         }
     }
 }

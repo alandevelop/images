@@ -31,6 +31,9 @@ class Storage
     public static function removeFile($path)
     {
         $path = substr_replace($path, '', 0, 1);
-        FileHelper::unlink($path);
+        if (file_exists($path)) {
+            FileHelper::unlink($path);
+            return true;
+        }
     }
 }

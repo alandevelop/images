@@ -9,9 +9,9 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-use Yii;
 
 AppAsset::register($this);
+$this->registerCssFile('@web/css/customstyles.css');
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -30,19 +30,29 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => 'Images',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Создать пост', 'url' => ['/post/default/create'], 'visible' => !Yii::$app->user->isGuest],
+
+        ['label' => 'Signup', 'url' => ['/user/default/signup'], 'visible' => Yii::$app->user->isGuest],
+        ['label' => 'Login', 'url' => ['/user/default/login'], 'visible' => Yii::$app->user->isGuest],
+        [
+            'label' => 'Войти с помощью VK',
+            'url' => ['/user/default/auth?authclient=vkontakte'],
+            'visible' => Yii::$app->user->isGuest
+        ],
     ];
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/user/default/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/user/default/login']];
-    } else {
+
+    if (!Yii::$app->user->isGuest) {
+        $menuItems[] = [
+            'label' => 'Мой профайл',
+            'url' => ['/user/profile/view', 'id' => Yii::$app->user->identity->id]
+        ];
         $menuItems[] = '<li>'
             . Html::beginForm(['/user/default/logout'], 'post')
             . Html::submitButton(
@@ -51,8 +61,10 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li>';
-        $menuItems[] = ['label' => 'Создать пост', 'url' => ['/post/default/create']];
+    } else {
+
     }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
@@ -63,19 +75,6 @@ AppAsset::register($this);
 
 
     <div class="container">
-
-        <?php if (Yii::$app->user->isGuest): ?>
-
-            <div class="">
-                <?= \yii\authclient\widgets\AuthChoice::widget([
-                    'baseAuthUrl' => ['/user/default/auth'],
-                    'popupMode' => false,
-                ]) ?>
-                Войти с помощью вконтакте.
-            </div>
-
-        <?php endif; ?>
-
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
@@ -87,11 +86,7 @@ AppAsset::register($this);
 
 
 <footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
 </footer>
 
 <?php $this->endBody() ?>
