@@ -31,8 +31,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function __construct()
     {
-        parent::__construct();
+
         $this->on(self::EVENT_AFTER_UPDATE, [$this, 'assignRole']);
+        return parent::__construct();
     }
 
     public function assignRole()
