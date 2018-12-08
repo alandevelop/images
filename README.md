@@ -1,28 +1,31 @@
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
-    <br>
-</p>
+ <h3>О проекте:</h3>
+                
+<b>Пользователи для тестирования:</b>
+<ul>
+    <li>email: test@test.com, pswd: test</li>
+    <li>email: admin@admin.com, pswd: admin</li>
+    <li>Админ панель: images-admin.alanhtml.ru</li>
+</ul>
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
-
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
-
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
-
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
-
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-app-advanced.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-advanced)
-
-DIRECTORY STRUCTURE
--------------------
+<b>Некоторые возможности реализованного функционала в проекте:</b>
+<ul>
+    <li>Авторизация с помощью Вконтакте по протоколу OAuth2</li>
+    <li>Механизм подписок с использованием Redis</li>
+    <li>Изменение размера изображения поста сразу после загрузки с сохранением пропорций</li>
+    <li>Контроль доступа в админ панель на основе ролей (RBAC)</li>
+    <li>Возможность назначать админом дополнительных пользователей</li>
+    <li>
+        С помощью AJAX реализовано:
+        <ul>
+            <li>Лайки к постам с подсчетом их количества</li>
+            <li>Возможность подать жалобу на пост + одобрение/удаление поста в админ панели</li>
+            <li>Изменение описание своего профиля</li>
+            <li>Загрузка аватара</li>
+            <li>Удаление своих постов</li>
+        </ul>
+    </li>
+</ul>
+                
 
 ```
 common
