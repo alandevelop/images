@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m181206_072756_alter_feed_table_add_foreign_key_for_post
+ * Class m181209_062019_alter_user_table_add_fk_post
  */
-class m181206_072756_alter_feed_table_add_foreign_key_for_post extends Migration
+class m181209_062019_alter_user_table_add_fk_post extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,16 +13,17 @@ class m181206_072756_alter_feed_table_add_foreign_key_for_post extends Migration
     public function safeUp()
     {
         $this->createIndex(
-            'idx-feed-post_id',
-            'feed',
-            'post_id'
+            'idx-post-user_id',
+            'post',
+            'user_id'
         );
 
+        // add foreign key for table `user`
         $this->addForeignKey(
-            'fk-feed-post_id',
-            'feed',
-            'post_id',
+            'fk-post-user_id',
             'post',
+            'user_id',
+            'user',
             'id',
             'CASCADE'
         );
@@ -34,13 +35,13 @@ class m181206_072756_alter_feed_table_add_foreign_key_for_post extends Migration
     public function safeDown()
     {
         $this->dropForeignKey(
-            'fk-feed-post_id',
-            'feed'
+            'fk-post-user_id',
+            'post'
         );
 
         $this->dropIndex(
-            'idx-feed-post_id',
-            'feed'
+            'idx-post-user_id',
+            'post'
         );
     }
 
@@ -53,7 +54,7 @@ class m181206_072756_alter_feed_table_add_foreign_key_for_post extends Migration
 
     public function down()
     {
-        echo "m181206_072756_alter_feed_table_add_foreign_key_for_post cannot be reverted.\n";
+        echo "m181209_062019_alter_user_table_add_fk_post cannot be reverted.\n";
 
         return false;
     }

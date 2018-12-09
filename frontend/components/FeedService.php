@@ -24,7 +24,7 @@ class FeedService extends Component
             $feed->post_description = $post->description;
             $feed->post_created_at = $post->created_at;
 
-            $feed->save();
+            $feed->save(false);
         }
     }
 }

@@ -23,6 +23,14 @@ class ProfileController extends Controller
         );
     }
 
+    public function actionDelete($id)
+    {
+        $user = $this->findUser($id);
+        Yii::$app->user->logout();
+        $user->delete();
+        return $this->goHome();
+    }
+
 
     public function findUser($id)
     {

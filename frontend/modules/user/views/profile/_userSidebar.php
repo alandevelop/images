@@ -42,8 +42,15 @@ use yii\helpers\Url;
                 Поменять аватар
             </label>
             <div class="avatarErrors" style="display: none;"></div>
+
+            <hr>
+            <a href="<?php echo Url::to(['/user/profile/delete', 'id' => $currentUser->id]); ?>"
+               class="btn btn-danger btn-block" onclick="return confirm('Вы уверены?')"
+               style="margin-top: 20px;"
+            >Удалить свой профиль</a>
         <?php endif; ?>
         <hr>
+
 
         <?php if ($currentUser !== null && !$currentUser->equals($user)) : ?>
             <?php if ($currentUser->isSubscribedTo($user)) : ?>
