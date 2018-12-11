@@ -44,10 +44,19 @@ use yii\helpers\Url;
             <div class="avatarErrors" style="display: none;"></div>
 
             <hr>
-            <a href="<?php echo Url::to(['/user/profile/delete', 'id' => $currentUser->id]); ?>"
-               class="btn btn-danger btn-block" onclick="return confirm('Вы уверены?')"
-               style="margin-top: 20px;"
-            >Удалить свой профиль</a>
+
+            <?php if (!$currentUser->isAdmin()) : ?>
+                <a href="<?php echo Url::to(['/user/profile/delete', 'id' => $currentUser->id]); ?>"
+                   class="btn btn-danger btn-block" onclick="return confirm('Вы уверены?')"
+                   style="margin-top: 20px;"
+                >Удалить свой профиль</a>
+            <?php else: ?>
+                <a
+                        class="btn btn-danger btn-block"
+                        onclick="alert('Пользователь с правами admin не может удалить свой профиль.'); return false;"
+                        style="margin-top: 20px;"
+                >Удалить свой профиль</a>
+            <?php endif; ?>
         <?php endif; ?>
         <hr>
 

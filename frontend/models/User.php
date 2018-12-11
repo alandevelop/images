@@ -264,4 +264,13 @@ class User extends ActiveRecord implements IdentityInterface
         $redis = Yii::$app->redis;
         return $redis->sismember("user:{$this->id}:likes", $post_id);
     }
+
+    public function isAdmin()
+    {
+        if (Yii::$app->authManager->getAssignment('admin', $this->id)) {
+            return true;
+        }
+
+        return false;
+    }
 }
